@@ -12,8 +12,8 @@ import { getImageImport } from "@/lib/get-image-import";
 const page = await createCollectionResource("pages", locale).read("people");
 const people = await createCollectionResource("people", locale).all();
 const sortedPeople = people.toSorted((a, z) => {
-	if (a.data.lead === true) return -1;
-	if (z.data.lead === true) return 1;
+	if (a.data.lead) return -1;
+	if (z.data.lead) return 1;
 	return a.data.name.localeCompare(z.data.name);
 });
 
@@ -37,18 +37,18 @@ const { default: Content } = await page.compile(content);
 
 						return (
 							<li>
-								<article class="grid gap-x-6 grid-cols-[auto_1fr]">
+								<article class="grid grid-cols-[auto_1fr] gap-x-6">
 									{image ? (
-										<div class="w-36 h-48 rounded-md overflow-hidden relative my-2">
+										<div class="relative my-2 h-48 w-36 overflow-hidden rounded-md">
 											<Image
 												alt=""
-												class="absolute object-cover inset-0 size-full"
+												class="absolute inset-0 size-full object-cover"
 												src={getImageImport(image)}
 											/>
 										</div>
 									) : null}
 									<div class="grid gap-y-2">
-										<h2 class="text-brand font-medium text-xl">{name}</h2>
+										<h2 class="text-xl font-medium text-brand">{name}</h2>
 										{role ? <div class="text-sm text-brand/90">{role}</div> : null}
 										<Content />
 									</div>

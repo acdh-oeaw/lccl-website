@@ -26,26 +26,26 @@ const { default: Content } = await page.compile(content);
 			</div>
 			<ul class="grid gap-y-12" role="list">
 				{
-					seminars.map(async (seminar) => {
+					seminars.map((seminar) => {
 						const { image, summary, title } = seminar.data;
 						const href = `/seminars/${seminar.id}`;
 
 						return (
 							<li>
-								<article class="grid gap-x-6 grid-cols-[auto_1fr]">
+								<article class="grid grid-cols-[auto_1fr] gap-x-6">
 									{image ? (
-										<div class="w-36 h-48 rounded-md overflow-hidden relative my-2">
+										<div class="relative my-2 h-48 w-36 overflow-hidden rounded-md">
 											<a aria-hidden="true" href={href} tabindex={-1}>
 												<Image
 													alt=""
-													class="absolute object-cover inset-0 size-full"
+													class="absolute inset-0 size-full object-cover"
 													src={getImageImport(image)}
 												/>
 											</a>
 										</div>
 									) : null}
-									<div class="grid gap-y-2 content-start">
-										<h2 class="text-brand font-medium text-xl">
+									<div class="grid content-start gap-y-2">
+										<h2 class="text-xl font-medium text-brand">
 											<a href={href} tabindex={-1}>
 												{title}
 											</a>
@@ -53,7 +53,7 @@ const { default: Content } = await page.compile(content);
 										<div class="prose">{summary}</div>
 										<a
 											aria-label={`Read more about "${title}"`}
-											class="justify-self-end bg-brand text-white px-4 py-1.5 text-sm font-medium inline-flex rounded-md hover:bg-brand-intent transition"
+											class="inline-flex justify-self-end rounded-md bg-brand px-4 py-1.5 text-sm font-medium text-white transition hover:bg-brand-intent"
 											href={href}
 										>
 											Read more

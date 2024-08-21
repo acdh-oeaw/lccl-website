@@ -24,6 +24,11 @@ export const events = createCollection((locale) => {
 					validation: { isRequired: true },
 				},
 			}),
+			publicationDate: fields.date({
+				label: "Publication date",
+				validation: { isRequired: true },
+				defaultValue: { kind: "today" },
+			}),
 			image: fields.image({
 				label: "Image",
 				// validation: { isRequired: false },
@@ -210,6 +215,11 @@ export const projects = createCollection((locale) => {
 					validation: { isRequired: true },
 				},
 			}),
+			publicationDate: fields.date({
+				label: "Publication date",
+				validation: { isRequired: true },
+				defaultValue: { kind: "today" },
+			}),
 			image: fields.image({
 				label: "Image",
 				// validation: { isRequired: false },
@@ -250,6 +260,11 @@ export const publicLectures = createCollection((locale) => {
 					validation: { isRequired: true },
 				},
 			}),
+			publicationDate: fields.date({
+				label: "Publication date",
+				validation: { isRequired: true },
+				defaultValue: { kind: "today" },
+			}),
 			image: fields.image({
 				label: "Image",
 				// validation: { isRequired: false },
@@ -289,6 +304,11 @@ export const seminars = createCollection((locale) => {
 					label: "Title",
 					validation: { isRequired: true },
 				},
+			}),
+			publicationDate: fields.date({
+				label: "Publication date",
+				validation: { isRequired: true },
+				defaultValue: { kind: "today" },
 			}),
 			image: fields.image({
 				label: "Image",

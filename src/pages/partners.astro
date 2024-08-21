@@ -32,50 +32,48 @@ const { default: Content } = await page.compile(content);
 
 						return (
 							<li>
-								<article class="grid gap-x-6 grid-cols-[auto_1fr]">
+								<article class="grid grid-cols-[auto_1fr] gap-x-6">
 									{logo ? (
-										<div class="size-36 rounded-md overflow-hidden relative my-2">
+										<div class="relative my-2 size-36 overflow-hidden rounded-md">
 											<Image
 												alt=""
-												class="absolute object-top object-contain inset-0 size-full"
+												class="absolute inset-0 size-full object-contain object-top"
 												src={getImageImport(logo)}
 											/>
 										</div>
 									) : null}
 									<div class="grid gap-y-2">
-										<h2 class="text-brand font-medium text-xl">{name}</h2>
+										<h2 class="text-xl font-medium text-brand">{name}</h2>
 										{website ? (
 											<a
-												class="underline text-sm text-neutral-700 decoration-dotted hover:no-underline"
+												class="text-sm text-neutral-700 underline decoration-dotted hover:no-underline"
 												href={website}
 											>
 												Website
 											</a>
 										) : null}
-										{lead ? (
-											<div class="grid gap-y-2">
-												<div>
-													<span>Lead by</span>
-													{lead.website ? (
-														<a
-															class="underline decoration-dotted hover:no-underline"
-															href={lead.website}
-														>
-															{lead.name}
-														</a>
-													) : (
-														<span>{lead.name}</span>
-													)}
-												</div>
-												{lead.image ? (
-													<Image
-														alt=""
-														class="size-24 rounded-md object-cover"
-														src={getImageImport(lead.image)}
-													/>
-												) : null}
+										<div class="grid gap-y-2">
+											<div>
+												<span>Lead by</span>
+												{lead.website ? (
+													<a
+														class="underline decoration-dotted hover:no-underline"
+														href={lead.website}
+													>
+														{lead.name}
+													</a>
+												) : (
+													<span>{lead.name}</span>
+												)}
 											</div>
-										) : null}
+											{lead.image ? (
+												<Image
+													alt=""
+													class="size-24 rounded-md object-cover"
+													src={getImageImport(lead.image)}
+												/>
+											) : null}
+										</div>
 										<Content />
 									</div>
 								</article>

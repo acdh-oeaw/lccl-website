@@ -1,0 +1,39 @@
+{
+  "links": [
+    {
+      "discriminant": "page",
+      "value": {
+        "label": "People",
+        "id": "people"
+      }
+    },
+    {
+      "discriminant": "page",
+      "value": {
+        "label": "Projects",
+        "id": "projects"
+      }
+    },
+    {
+      "discriminant": "page",
+      "value": {
+        "label": "Seminars",
+        "id": "seminars"
+      }
+    },
+    {
+      "discriminant": "page",
+      "value": {
+        "label": "Partners",
+        "id": "partners"
+      }
+    },
+    {
+      "discriminant": "page",
+      "value": {
+        "label": "Public lectures",
+        "id": "public-lectures"
+      }
+    }
+  ]
+}

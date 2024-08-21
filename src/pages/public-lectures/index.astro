@@ -1,0 +1,70 @@
+---
+import { Image } from "astro:assets";
+
+import MainContent from "@/components/main-content.astro";
+import PageCard from "@/components/page-card.astro";
+import PageTitle from "@/components/page-title.astro";
+import { defaultLocale as locale } from "@/config/i18n.config";
+import PageLayout from "@/layouts/page-layout.astro";
+import { createCollectionResource } from "@/lib/content/create-resource";
+import { getImageImport } from "@/lib/get-image-import";
+
+const page = await createCollectionResource("pages", locale).read("public-lectures");
+const publicLectures = await createCollectionResource("publicLectures", locale).all();
+
+const documentTitle = page.data.title;
+const { content, image, title } = page.data;
+const { default: Content } = await page.compile(content);
+---
+
+<PageLayout locale={locale} title={documentTitle}>
+	<MainContent>
+		<PageCard image={image}>
+			<PageTitle>{title}</PageTitle>
+			<div class="prose">
+				<Content />
+			</div>
+			<ul class="grid gap-y-12" role="list">
+				{
+					publicLectures.map(async (lecture) => {
+						const { image, summary, title } = lecture.data;
+						const href = `/public-lectures/${lecture.id}`;
+
+						return (
+							<li>
+								<article class="grid gap-x-6 grid-cols-[auto_1fr]">
+									{image ? (
+										<div class="w-36 h-48 rounded-md overflow-hidden relative my-2">
+											<a aria-hidden="true" href={href} tabindex={-1}>
+												<Image
+													alt=""
+													class="absolute object-cover inset-0 size-full"
+													src={getImageImport(image)}
+												/>
+											</a>
+										</div>
+									) : null}
+									<div class="grid gap-y-2 content-start">
+										<h2 class="text-brand font-medium text-xl">
+											<a href={href} tabindex={-1}>
+												{title}
+											</a>
+										</h2>
+										<div class="prose">{summary}</div>
+										<a
+											aria-label={`Read more about "${title}"`}
+											class="justify-self-end bg-brand text-white px-4 py-1.5 text-sm font-medium inline-flex rounded-md hover:bg-brand-intent transition"
+											href={href}
+										>
+											Read more
+										</a>
+									</div>
+								</article>
+							</li>
+						);
+					})
+				}
+			</ul>
+		</PageCard>
+	</MainContent>
+</PageLayout>

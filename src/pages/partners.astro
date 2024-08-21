@@ -1,0 +1,89 @@
+---
+import { Image } from "astro:assets";
+
+import MainContent from "@/components/main-content.astro";
+import PageCard from "@/components/page-card.astro";
+import PageTitle from "@/components/page-title.astro";
+import { defaultLocale as locale } from "@/config/i18n.config";
+import PageLayout from "@/layouts/page-layout.astro";
+import { createCollectionResource } from "@/lib/content/create-resource";
+import { getImageImport } from "@/lib/get-image-import";
+
+const page = await createCollectionResource("pages", locale).read("partners");
+const partners = await createCollectionResource("partners", locale).all();
+
+const documentTitle = page.data.title;
+const { content, image, title } = page.data;
+const { default: Content } = await page.compile(content);
+---
+
+<PageLayout locale={locale} title={documentTitle}>
+	<MainContent>
+		<PageCard image={image}>
+			<PageTitle>{title}</PageTitle>
+			<div class="prose">
+				<Content />
+			</div>
+			<ul class="grid gap-y-12" role="list">
+				{
+					partners.map(async (partner) => {
+						const { content, logo, name, lead, website } = partner.data;
+						const { default: Content } = await partner.compile(content);
+
+						return (
+							<li>
+								<article class="grid gap-x-6 grid-cols-[auto_1fr]">
+									{logo ? (
+										<div class="size-36 rounded-md overflow-hidden relative my-2">
+											<Image
+												alt=""
+												class="absolute object-top object-contain inset-0 size-full"
+												src={getImageImport(logo)}
+											/>
+										</div>
+									) : null}
+									<div class="grid gap-y-2">
+										<h2 class="text-brand font-medium text-xl">{name}</h2>
+										{website ? (
+											<a
+												class="underline text-sm text-neutral-700 decoration-dotted hover:no-underline"
+												href={website}
+											>
+												Website
+											</a>
+										) : null}
+										{lead ? (
+											<div class="grid gap-y-2">
+												<div>
+													<span>Lead by</span>
+													{lead.website ? (
+														<a
+															class="underline decoration-dotted hover:no-underline"
+															href={lead.website}
+														>
+															{lead.name}
+														</a>
+													) : (
+														<span>{lead.name}</span>
+													)}
+												</div>
+												{lead.image ? (
+													<Image
+														alt=""
+														class="size-24 rounded-md object-cover"
+														src={getImageImport(lead.image)}
+													/>
+												) : null}
+											</div>
+										) : null}
+										<Content />
+									</div>
+								</article>
+							</li>
+						);
+					})
+				}
+			</ul>
+		</PageCard>
+	</MainContent>
+</PageLayout>

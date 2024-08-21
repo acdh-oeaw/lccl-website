@@ -1,0 +1,73 @@
+---
+import { Image } from "astro:assets";
+
+import type { Locale } from "@/config/i18n.config";
+import { createI18n } from "@/lib/i18n";
+import acdh from "~/public/assets/images/acdh-ch-logo-with-text.png";
+import ihb from "~/public/assets/images/ihb-logo-with-text.png";
+import oeaw from "~/public/assets/images/oeaw-logo-with-text.jpg";
+
+const { t } = await createI18n(Astro.currentLocale as Locale | undefined);
+
+const imprint = t("WebsiteFooter.links.imprint");
+---
+
+<footer class="bg-[#00112E] text-white">
+	<div
+		class="mx-auto grid w-full max-w-screen-lg gap-x-6 gap-y-4 px-4 py-8 xs:py-16 md:grid-cols-4"
+	>
+		<div class="grid gap-y-2 text-sm">
+			<strong class="text-lg font-medium">Contact</strong>
+
+			<div>
+				Austrian Academy of Sciences<br />
+				Institute for Habsburg and Balkan Studies
+			</div>
+
+			<div>
+				Georg-Coch-Platz 2<br />
+				1010 Wien
+			</div>
+
+			<div>
+				Post address<br />
+				Dr. Ignaz-Seipel-Platz 2<br />
+				1010 Wien
+			</div>
+
+			<div>
+				<a class="block underline decoration-dotted hover:no-underline" href="tel:+43-1-51581-7353"
+					>T: +43-1-51581-7353</a
+				>
+				<a
+					class="block underline decoration-dotted hover:no-underline"
+					href="mailto:lccl@oeaw.ac.at">E: lccl@oeaw.ac.at</a
+				>
+			</div>
+		</div>
+
+		<div class="grid content-start gap-y-2">
+			<strong>Institute</strong>
+			<span class="sr-only">
+				Institut für die Erforschung der Habsburgermonarchie und des Balkanraumes
+			</span>
+			<Image alt="" class="h-20 w-auto bg-white object-contain p-2" src={ihb} />
+		</div>
+
+		<div class="grid content-start gap-y-2">
+			<strong>Financed by</strong>
+			<span class="sr-only">Austrian Academy of Sciences</span>
+			<Image alt="" class="h-20 w-auto bg-white object-contain p-2" src={oeaw} />
+		</div>
+
+		<div class="grid content-start gap-y-2">
+			<strong>In cooperation with</strong>
+			<span class="sr-only">Austrian Centre for Digital Humanities and Cultural Heritage</span>
+			<Image alt="" class="h-20 w-auto bg-white object-contain p-2" src={acdh} />
+		</div>
+	</div>
+
+	<div class="flex justify-center text-sm">
+		&copy; OEAW | <a href="/imprint">{imprint}</a>
+	</div>
+</footer>

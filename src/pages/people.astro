@@ -1,0 +1,63 @@
+---
+import { Image } from "astro:assets";
+
+import MainContent from "@/components/main-content.astro";
+import PageCard from "@/components/page-card.astro";
+import PageTitle from "@/components/page-title.astro";
+import { defaultLocale as locale } from "@/config/i18n.config";
+import PageLayout from "@/layouts/page-layout.astro";
+import { createCollectionResource } from "@/lib/content/create-resource";
+import { getImageImport } from "@/lib/get-image-import";
+
+const page = await createCollectionResource("pages", locale).read("people");
+const people = await createCollectionResource("people", locale).all();
+const sortedPeople = people.toSorted((a, z) => {
+	if (a.data.lead === true) return -1;
+	if (z.data.lead === true) return 1;
+	return a.data.name.localeCompare(z.data.name);
+});
+
+const documentTitle = page.data.title;
+const { content, image, title } = page.data;
+const { default: Content } = await page.compile(content);
+---
+
+<PageLayout locale={locale} title={documentTitle}>
+	<MainContent>
+		<PageCard image={image}>
+			<PageTitle>{title}</PageTitle>
+			<div class="prose">
+				<Content />
+			</div>
+			<ul class="grid gap-y-12" role="list">
+				{
+					sortedPeople.map(async (person) => {
+						const { content, image, name, role } = person.data;
+						const { default: Content } = await person.compile(content);
+
+						return (
+							<li>
+								<article class="grid gap-x-6 grid-cols-[auto_1fr]">
+									{image ? (
+										<div class="w-36 h-48 rounded-md overflow-hidden relative my-2">
+											<Image
+												alt=""
+												class="absolute object-cover inset-0 size-full"
+												src={getImageImport(image)}
+											/>
+										</div>
+									) : null}
+									<div class="grid gap-y-2">
+										<h2 class="text-brand font-medium text-xl">{name}</h2>
+										{role ? <div class="text-sm text-brand/90">{role}</div> : null}
+										<Content />
+									</div>
+								</article>
+							</li>
+						);
+					})
+				}
+			</ul>
+		</PageCard>
+	</MainContent>
+</PageLayout>

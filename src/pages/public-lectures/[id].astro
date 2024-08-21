@@ -1,0 +1,35 @@
+---
+import MainContent from "@/components/main-content.astro";
+import PageCard from "@/components/page-card.astro";
+import PageTitle from "@/components/page-title.astro";
+import { defaultLocale as locale } from "@/config/i18n.config";
+import PageLayout from "@/layouts/page-layout.astro";
+import { createCollectionResource } from "@/lib/content/create-resource";
+
+export async function getStaticPaths() {
+	const ids = await createCollectionResource("publicLectures", locale).list();
+
+	return ids.map((id) => {
+		return { params: { id } };
+	});
+}
+
+const { id } = Astro.params;
+
+const page = await createCollectionResource("publicLectures", locale).read(id);
+
+const documentTitle = page.data.title;
+const { content, image, title } = page.data;
+const { default: Content } = await page.compile(content);
+---
+
+<PageLayout locale={locale} title={documentTitle}>
+	<MainContent>
+		<PageCard image={image}>
+			<PageTitle>{title}</PageTitle>
+			<div class="prose">
+				<Content />
+			</div>
+		</PageCard>
+	</MainContent>
+</PageLayout>

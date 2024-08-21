@@ -1,0 +1,32 @@
+{
+  "hero": {
+    "title": "Language Culture Cognition Lab",
+    "image": "/assets/content/en/index-page/hero/image.jpg"
+  },
+  "main": {
+    "sections": [
+      {
+        "discriminant": "text",
+        "value": {
+          "title": "Welcome"
+        }
+      },
+      {
+        "discriminant": "data",
+        "value": {
+          "title": "Events",
+          "collections": [
+            "events"
+          ],
+          "count": 3
+        }
+      },
+      {
+        "discriminant": "text",
+        "value": {
+          "title": "Support"
+        }
+      }
+    ]
+  }
+}

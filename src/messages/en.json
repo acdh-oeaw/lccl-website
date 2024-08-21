@@ -1,0 +1,55 @@
+{
+	"ImageCarousel": {
+		"next": "Next",
+		"previous": "Previous",
+		"slide": "{current} of {total}",
+		"start": "Start",
+		"stop": "Pause"
+	},
+	"ImprintPage": {
+		"meta": {
+			"title": "Imprint"
+		},
+		"title": "Imprint"
+	},
+	"IndexPage": {
+		"meta": {
+			"title": "Home"
+		}
+	},
+	"MobileNavToggle": {
+		"label": "Open navigation menu"
+	},
+	"NotFoundPage": {
+		"meta": {
+			"title": "Page not found"
+		},
+		"title": "Page not found"
+	},
+	"Search": {
+		"close-dialog": "Close dialog",
+		"search": "Search"
+	},
+	"SkipLink": {
+		"skip-to-main-content": "Skip to main content"
+	},
+	"TableOfContents": {
+		"tableOfContents": "Table of contents"
+	},
+	"WebsiteFooter": {
+		"contact": "Contact",
+		"links": {
+			"imprint": "Imprint"
+		}
+	},
+	"WebsiteHeader": {
+		"links": {
+			"home": "Home"
+		},
+		"navigation-primary": "Primary"
+	},
+	"mdx": {
+		"footnote-back-label": "Back to reference {reference}",
+		"footnotes": "Footnotes"
+	}
+}

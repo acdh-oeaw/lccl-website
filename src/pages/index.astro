@@ -1,0 +1,131 @@
+---
+import { Image } from "astro:assets";
+import { compareDesc } from "date-fns";
+
+import Card from "@/components/content/card.astro";
+import MainContent from "@/components/main-content.astro";
+import PageSection from "@/components/page-section.astro";
+import PageSectionTitle from "@/components/page-section-title.astro";
+import { defaultLocale as locale } from "@/config/i18n.config";
+import PageLayout from "@/layouts/page-layout.astro";
+import { createCollectionResource, createSingletonResource } from "@/lib/content/create-resource";
+import { getImageImport } from "@/lib/get-image-import";
+import { createI18n } from "@/lib/i18n";
+
+const { t } = await createI18n(locale);
+
+const page = await createSingletonResource("indexPage", locale).read();
+
+const documentTitle = t("IndexPage.meta.title");
+const { hero, main } = page.data;
+---
+
+<PageLayout locale={locale} title={documentTitle}>
+	<MainContent>
+		<div class="relative py-40 text-white">
+			<Image
+				alt=""
+				class="absolute inset-0 size-full object-cover"
+				loading="eager"
+				sizes="(max-width: 480px) 480px, (max-width: 768px) 768px, 100vw"
+				src={getImageImport(hero.image)}
+				widths={[480, 768, 1280]}
+			/>
+			<PageSection class="relative">
+				<h1 class="sr-only">{hero.title}</h1>
+			</PageSection>
+		</div>
+
+		{
+			main.sections.map(async (section) => {
+				switch (section.discriminant) {
+					case "data": {
+						const { collections, count, title } = section.value;
+
+						let items = [];
+
+						for (const collection of collections) {
+							const entries = await createCollectionResource(collection, locale).all();
+
+							items.push(
+								...entries.map((entry) => {
+									return { ...entry, collection };
+								}),
+							);
+						}
+
+						items.sort((a, z) => {
+							return compareDesc(
+								new Date(a.data.publicationDate),
+								new Date(z.data.publicationDate),
+							);
+						});
+
+						items = items.slice(0, count);
+
+						return (
+							<PageSection>
+								<PageSectionTitle>{title}</PageSectionTitle>
+								<ul class="grid gap-4 grid-fluid-cols-56 grid-fluid-cols-auto-fit" role="list">
+									{items.map((item) => {
+										return (
+											<li>
+												<Card
+													href={`/${item.collection}/${item.id}`}
+													title={item.data.title}
+													summary={item.data.summary}
+												/>
+											</li>
+										);
+									})}
+								</ul>
+							</PageSection>
+						);
+					}
+
+					case "links": {
+						const { links, title } = section.value;
+
+						const items = [];
+
+						for (const link of links) {
+							const item = await createCollectionResource("pages", locale).read(link.value.id);
+
+							items.push({ ...item.data, id: item.id });
+						}
+
+						return (
+							<PageSection>
+								<PageSectionTitle>{title}</PageSectionTitle>
+								<ul class="grid gap-4 grid-fluid-cols-56 grid-fluid-cols-auto-fit" role="list">
+									{items.map((item) => {
+										return (
+											<li>
+												<Card href={`/${item.id}`} title={item.title} summary={item.summary} />
+											</li>
+										);
+									})}
+								</ul>
+							</PageSection>
+						);
+					}
+
+					case "text": {
+						const { title, content } = section.value;
+
+						const { default: Content } = await page.compile(content);
+
+						return (
+							<PageSection>
+								<PageSectionTitle>{title}</PageSectionTitle>
+								<div class="prose rounded-b-md border-t-4 border-brand bg-white p-4 shadow">
+									<Content />
+								</div>
+							</PageSection>
+						);
+					}
+				}
+			})
+		}
+	</MainContent>
+</PageLayout>

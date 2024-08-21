@@ -1,0 +1,15 @@
+---
+import { getImageImport } from "@/lib/get-image-import";
+import { Image } from "astro:assets";
+
+interface Props {
+	image: string;
+}
+
+const { image } = Astro.props;
+---
+
+<div class="grid content-start gap-x-6 grid-cols-[200px_1fr]">
+	<Image alt="" src={getImageImport(image)} />
+	<slot />
+</div>

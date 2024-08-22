@@ -22,7 +22,7 @@ const imprintHtml = await request(imprintUrl, { responseType: "text" });
 	<MainContent search="exclude">
 		<PageCard>
 			<PageTitle>{title}</PageTitle>
-			<div class="prose" set:html={imprintHtml} />
+			<div class="prose prose-sm" set:html={imprintHtml} />
 		</PageCard>
 	</MainContent>
 </PageLayout>

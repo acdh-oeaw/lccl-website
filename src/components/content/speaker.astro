@@ -10,7 +10,7 @@ interface Props {
 const { image } = Astro.props;
 ---
 
-<div class="grid content-start gap-x-6 gap-y-4 sm:grid-cols-[200px_1fr]">
+<div class="grid content-start gap-x-6 gap-y-4 xs:grid-cols-[200px_1fr]">
 	<Image alt="" src={getImageImport(image)} />
 	<slot />
 </div>

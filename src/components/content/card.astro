@@ -16,7 +16,7 @@ const { href, summary, title } = Astro.props;
 			{title}
 		</Link>
 	</h3>
-	<p class="text-neutral-700">{summary}</p>
+	<div class="prose">{summary}</div>
 	<footer>
 		<Link
 			aria-label={`Read more about "${title}".`}

@@ -108,5 +108,5 @@ test("should serve an open-graph image", async ({ createIndexPage, request }) =>
 	const contentType = response.headers()["content-type"];
 
 	expect(status).toBe(200);
-	expect(contentType).toBe("image/jpg");
+	expect(contentType).toBe("image/jpeg");
 });

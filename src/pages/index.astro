@@ -27,9 +27,10 @@ const { hero, main } = page.data;
 				alt=""
 				class="absolute inset-0 size-full object-cover"
 				loading="eager"
+				quality={100}
 				sizes="(max-width: 480px) 480px, (max-width: 768px) 768px, 100vw"
 				src={getImageImport(hero.image)}
-				widths={[480, 768, 1280]}
+				widths={[480, 768, 1280, 1600, 1920]}
 			/>
 			<PageSection class="relative">
 				<h1 class="sr-only">{hero.title}</h1>

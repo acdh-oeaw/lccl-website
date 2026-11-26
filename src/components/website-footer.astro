@@ -3,8 +3,8 @@ import { Image } from "astro:assets";
 
 import type { Locale } from "@/config/i18n.config";
 import { createI18n } from "@/lib/i18n";
-import acdh from "~/public/assets/images/acdh-ch-logo-with-text.png";
 import ihb from "~/public/assets/images/ihb-logo-with-text.png";
+import acdh from "~/public/assets/images/logo-acdh-with-text.svg";
 import oeaw from "~/public/assets/images/oeaw-logo-with-text.jpg";
 
 const { t } = await createI18n(Astro.currentLocale as Locale | undefined);
@@ -76,7 +76,7 @@ const imprint = t("WebsiteFooter.links.imprint");
 
 		<div class="grid content-start gap-y-2">
 			<strong>In cooperation with</strong>
-			<span class="sr-only">Austrian Centre for Digital Humanities and Cultural Heritage</span>
+			<span class="sr-only">Austrian Centre for Digital Humanities</span>
 			<Image
 				alt=""
 				class="h-20 w-auto bg-white object-contain p-2"

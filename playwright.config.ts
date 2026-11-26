@@ -1,5 +1,5 @@
 import { defineConfig, devices } from "@playwright/test";
-import { isInCi } from "is-in-ci";
+import isInCi from "is-in-ci";
 import { loadEnv } from "vite";
 
 Object.assign(process.env, loadEnv("test", process.cwd(), ""));

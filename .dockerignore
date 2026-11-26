@@ -63,5 +63,11 @@ playwright.config.ts
 # misc
 .editorconfig
 
-# astro assets cache
-!/node_modules/.astro/
+# local agent state and development tooling
+.agents/
+.codex/
+.aws/
+.devcontainer/
+
+# browser verification
+.playwright-cli/

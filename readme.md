@@ -6,12 +6,12 @@ website for the language - culture - cognition lab.
 
 prerequisites:
 
-- [node.js 20.x](https://nodejs.org/en/download)
-- [pnpm 9.x](https://pnpm.io/installation)
+- [node.js 26.x](https://nodejs.org/en/download)
+- [pnpm 12.x](https://pnpm.io/installation)
 
 > [!TIP]
 >
-> you can use `pnpm` to install the required node.js version with `pnpm env use 20 --global`
+> you can use `pnpm` to install the required node.js version with `pnpm env use 26 --global`
 
 set required environment variables in `.env.local`:
 
@@ -61,8 +61,7 @@ pnpm run dev
 ## how to edit content
 
 use the admin ui at when developing locally <http://localhost:3000/admin> (this will save changes to
-the filesystem), or at <https://template-website-astro.acdh-ch-dev.oeaw.ac.at/admin> (this will
-commit changes to the github repository).
+the filesystem), or at `<PUBLIC_URL>/admin` (this will commit changes to the github repository).
 
 ## how to deploy
 
@@ -97,9 +96,30 @@ if the validation pipeline passes.
 you can reference the [template repository](https://github.com/acdh-oeaw/template-website-astro) for
 a working setup.
 
-> [!NOTE]
->
-> by default, this will deploy a `node` server, which will serve pre-rendered pages, assets, and api
-> routes. if you prefer a truly static build, which uses `caddy` as a fileserver, use the
-> `Dockerfile.static` instead, and remove `output: "hybrid"` from `astro.config.ts`. you will also
-> need to change the `generate:search-index` script to `pagefind --site ./dist/`.
+The Docker image runs the Astro Node adapter as an unprivileged user on port 3000. Public pages and
+responsive WebP images are generated at build time; Keystatic, its API, and `/api/health` remain
+server routes. A static Caddy image cannot serve the CMS.
+
+Set `PUBLIC_KEYSTATIC_MODE=github`, the repository owner/name, and GitHub app slug as deployment
+variables. Provide `K8S_SECRET_KEYSTATIC_GITHUB_CLIENT_ID`,
+`K8S_SECRET_KEYSTATIC_GITHUB_CLIENT_SECRET`, and `K8S_SECRET_KEYSTATIC_SECRET` as GitHub secrets;
+the deployment workflow passes them to the build via secret mounts and to the running application.
+Configure the GitHub app callback URL as `<PUBLIC_URL>/api/keystatic/github/oauth/callback`. The
+reverse proxy must forward the public host and HTTPS protocol; Astro trusts the host specified by
+`PUBLIC_APP_BASE_URL` for Keystatic OAuth redirects.
+
+[Deployment values](./.github/auto-deploy-values.yaml) configure ingress and health probes on
+`/api/health`. Dependency layers and Astro image transforms use BuildKit caches.
+
+## checks
+
+```bash
+pnpm run format:check
+pnpm run lint:check
+pnpm run styles:check
+pnpm run types:check
+pnpm run build
+pnpm run test:e2e
+```
+
+TypeScript stays on version 6 while `@astrojs/check` requires TypeScript below version 7.

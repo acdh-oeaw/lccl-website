@@ -1,7 +1,4 @@
-import { createPreset } from "@acdh-oeaw/tailwindcss-preset";
 import type { Config } from "tailwindcss";
-
-const preset = createPreset();
 
 const config: Config = {
 	content: [
@@ -10,13 +7,12 @@ const config: Config = {
 		"./src/@(components|layouts|pages)/**/*.@(astro|css|ts|tsx)",
 		"./src/styles/**/*.css",
 	],
-	presets: [preset],
 	theme: {
 		extend: {
 			colors: {
 				brand: {
-					DEFAULT: "hsl(217.6deg 60.6% 39.8% / <alpha-value>)",
-					intent: "hsl(217.6deg 60.6% 24.8% / <alpha-value>)",
+					DEFAULT: "hsl(217.6deg 60.6% 39.8%)",
+					intent: "hsl(217.6deg 60.6% 24.8%)",
 				},
 			},
 			screens: {

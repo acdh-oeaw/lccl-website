@@ -30,33 +30,34 @@ const { default: Content } = await page.compile(content);
 				<Content />
 			</div>
 			<ul class="grid gap-y-12" role="list">
-				{
-					sortedPeople.map(async (person) => {
-						const { content, image, name, role } = person.data;
-						const { default: Content } = await person.compile(content);
+				{sortedPeople.map(async (person) => {
+					const { content, image, name, role } = person.data;
+					const { default: Content } = await person.compile(content);
 
-						return (
-							<li>
-								<article class="grid gap-x-6 gap-y-4 sm:grid-cols-[auto_1fr]">
-									{image ? (
-										<div class="relative my-2 h-48 w-36 overflow-hidden rounded-md">
-											<Image
-												alt=""
-												class="absolute inset-0 size-full object-cover"
-												src={getImageImport(image)}
-											/>
-										</div>
-									) : null}
-									<div class="grid gap-y-2">
-										<h2 class="text-xl font-medium text-brand">{name}</h2>
-										{role ? <div class="text-sm text-brand/90">{role}</div> : null}
-										<Content />
+					return (
+						<li>
+							<article class="grid gap-x-6 gap-y-4 sm:grid-cols-[auto_1fr]">
+								{image ? (
+									<div class="relative my-2 h-48 w-36 overflow-hidden rounded-md">
+										<Image
+											alt=""
+											class="absolute inset-0 size-full object-cover"
+											src={getImageImport(image)}
+											width={144}
+											widths={[144, 288, 432]}
+											sizes="9rem"
+										/>
 									</div>
-								</article>
-							</li>
-						);
-					})
-				}
+								) : null}
+								<div class="grid gap-y-2">
+									<h2 class="text-xl font-medium text-brand">{name}</h2>
+									{role ? <div class="text-sm text-brand/90">{role}</div> : null}
+									<Content />
+								</div>
+							</article>
+						</li>
+					);
+				})}
 			</ul>
 		</PageCard>
 	</MainContent>

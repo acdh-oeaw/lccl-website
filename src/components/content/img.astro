@@ -6,17 +6,28 @@ import { getImageImport } from "@/lib/get-image-import";
 
 interface Props extends HTMLAttributes<"img"> {}
 
-const { alt = "", src, ...rest } = Astro.props;
+const { alt = "", src, width: _width, height: _height, ...rest } = Astro.props;
 ---
 
-{
-	src != null ? (
-		src.startsWith("/") ? (
-			/* @ts-expect-error Upstream type issue. */
-			// prettier-ignore
-			<Image {...rest} alt={alt} src={getImageImport(src)} />
-		) : (
-			<img {...rest} alt={alt} src={src} />
-		)
-	) : null
-}
+{src != null ? (
+	src.startsWith("/") && !src.startsWith("//") ? (
+		<Image
+			{...rest}
+			alt={alt}
+			src={getImageImport(src)}
+			width={1120}
+			widths={[320, 640, 960, 1120]}
+			sizes="(min-width: 70rem) 67rem, calc(100vw - 3rem)"
+		/>
+	) : (
+		<img
+			{...rest}
+			alt={alt}
+			src={src}
+			width={_width}
+			height={_height}
+			loading={rest.loading ?? "lazy"}
+			decoding="async"
+		/>
+	)
+) : null}

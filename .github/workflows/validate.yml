@@ -41,32 +41,24 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        node-version: [24.x]
+        node-version: [26.x]
         os: [ubuntu-24.04]
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v6
+      - name: Install pnpm, Node.js, and dependencies
+        uses: pnpm/setup@v3
         with:
           cache: true
+          require-lockfile: true
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v6
-        with:
-          node-version: ${{ matrix.node-version }}
-
-      - name: Cache astro build artefacts
-        uses: actions/cache@v6
-        with:
-          path: node_modules/.astro/
-          key: ${{ runner.os }}-astro-${{ matrix.node-version }}-${{ github.run_id }}
-          restore-keys: ${{ runner.os }}-astro-${{ matrix.node-version }}
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      - name: Generate types
+        run: pnpm run sync
+        env:
+          PUBLIC_APP_BASE_URL: "http://localhost:3000"
+          PUBLIC_REDMINE_ID: "21463"
 
       - name: Format
         run: pnpm run format:check
@@ -74,8 +66,14 @@ jobs:
       - name: Lint
         run: pnpm run lint:check
 
+      - name: Lint styles
+        run: pnpm run styles:check
+
       - name: Typecheck
         run: pnpm run types:check
+        env:
+          PUBLIC_APP_BASE_URL: "http://localhost:3000"
+          PUBLIC_REDMINE_ID: "21463"
 
       - name: Test
         run: pnpm run test
@@ -103,7 +101,7 @@ jobs:
         run: pnpm run build
         env:
           PUBLIC_APP_BASE_URL: "http://localhost:3000"
-          PUBLIC_REDMINE_ID: "${{ vars.SERVICE_ID }}"
+          PUBLIC_REDMINE_ID: "${{ vars.SERVICE_ID || '21463' }}"
 
       - name: Run e2e tests
         run: pnpm run test:e2e

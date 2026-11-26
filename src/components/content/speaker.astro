@@ -11,6 +11,12 @@ const { image } = Astro.props;
 ---
 
 <div class="grid content-start gap-x-6 gap-y-4 xs:grid-cols-[200px_1fr]">
-	<Image alt="" src={getImageImport(image)} />
+	<Image
+		alt=""
+		src={getImageImport(image)}
+		width={640}
+		widths={[200, 400, 640]}
+		sizes="(min-width: 30rem) 200px, calc(100vw - 3rem)"
+	/>
 	<slot />
 </div>

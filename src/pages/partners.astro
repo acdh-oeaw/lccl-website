@@ -25,62 +25,66 @@ const { default: Content } = await page.compile(content);
 				<Content />
 			</div>
 			<ul class="grid gap-y-12" role="list">
-				{
-					partners.map(async (partner) => {
-						const { content, logo, name, lead, website } = partner.data;
-						const { default: Content } = await partner.compile(content);
+				{partners.map(async (partner) => {
+					const { content, logo, name, lead, website } = partner.data;
+					const { default: Content } = await partner.compile(content);
 
-						return (
-							<li>
-								<article class="grid gap-x-6 gap-y-4 sm:grid-cols-[auto_1fr]">
-									{logo ? (
-										<div class="relative h-36 w-full overflow-hidden rounded-md sm:my-2 sm:size-36">
-											<Image
-												alt=""
-												class="absolute inset-0 size-full object-contain object-left sm:object-top"
-												src={getImageImport(logo)}
-											/>
-										</div>
+					return (
+						<li>
+							<article class="grid gap-x-6 gap-y-4 sm:grid-cols-[auto_1fr]">
+								{logo ? (
+									<div class="relative h-36 w-full overflow-hidden rounded-md sm:my-2 sm:size-36">
+										<Image
+											alt=""
+											class="absolute inset-0 size-full object-contain object-left sm:object-top"
+											src={getImageImport(logo)}
+											width={288}
+											widths={[144, 288, 576]}
+											sizes="(min-width: 40rem) 9rem, calc(100vw - 3rem)"
+										/>
+									</div>
+								) : null}
+								<div class="grid gap-y-2">
+									<h2 class="text-xl font-medium text-brand">{name}</h2>
+									{website ? (
+										<a
+											class="text-sm text-neutral-700 underline decoration-dotted hover:no-underline"
+											href={website}
+										>
+											Website
+										</a>
 									) : null}
 									<div class="grid gap-y-2">
-										<h2 class="text-xl font-medium text-brand">{name}</h2>
-										{website ? (
-											<a
-												class="text-sm text-neutral-700 underline decoration-dotted hover:no-underline"
-												href={website}
-											>
-												Website
-											</a>
-										) : null}
-										<div class="grid gap-y-2">
-											<div>
-												<span>Lead by</span>
-												{lead.website ? (
-													<a
-														class="underline decoration-dotted hover:no-underline"
-														href={lead.website}
-													>
-														{lead.name}
-													</a>
-												) : (
-													<span>{lead.name}</span>
-												)}
-											</div>
-											{lead.image ? (
-												<Image
-													alt=""
-													class="size-24 rounded-md object-cover"
-													src={getImageImport(lead.image)}
-												/>
-											) : null}
+										<div>
+											<span>Lead by</span>
+											{lead.website ? (
+												<a
+													class="underline decoration-dotted hover:no-underline"
+													href={lead.website}
+												>
+													{lead.name}
+												</a>
+											) : (
+												<span>{lead.name}</span>
+											)}
 										</div>
-										<Content />
+										{lead.image ? (
+											<Image
+												alt=""
+												class="size-24 rounded-md object-cover"
+												src={getImageImport(lead.image)}
+												width={96}
+												widths={[96, 192, 288]}
+												sizes="6rem"
+											/>
+										) : null}
 									</div>
-								</article>
-							</li>
-						);
-					})
-				}
+									<Content />
+								</div>
+							</article>
+						</li>
+					);
+				})}
 			</ul>
 		</PageCard>
 	</MainContent>

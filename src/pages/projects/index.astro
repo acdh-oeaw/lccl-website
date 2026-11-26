@@ -25,45 +25,46 @@ const { default: Content } = await page.compile(content);
 				<Content />
 			</div>
 			<ul class="grid gap-y-12" role="list">
-				{
-					projects.map((project) => {
-						const { image, summary, title } = project.data;
-						const href = `/projects/${project.id}`;
+				{projects.map((project) => {
+					const { image, summary, title } = project.data;
+					const href = `/projects/${project.id}`;
 
-						return (
-							<li>
-								<article class="grid gap-x-6 gap-y-4 sm:grid-cols-[auto_1fr]">
-									{image ? (
-										<div class="relative my-2 h-48 overflow-hidden rounded-md sm:w-36">
-											<a aria-hidden="true" href={href} tabindex={-1}>
-												<Image
-													alt=""
-													class="absolute inset-0 size-full object-cover"
-													src={getImageImport(image)}
-												/>
-											</a>
-										</div>
-									) : null}
-									<div class="grid content-start gap-y-2">
-										<h2 class="text-xl font-medium text-brand">
-											<a href={href} tabindex={-1}>
-												{title}
-											</a>
-										</h2>
-										<div class="prose">{summary}</div>
-										<a
-											aria-label={`Read more about "${title}"`}
-											class="inline-flex justify-self-end rounded-md bg-brand px-4 py-1.5 text-sm font-medium text-white transition hover:bg-brand-intent"
-											href={href}
-										>
-											Read more
+					return (
+						<li>
+							<article class="grid gap-x-6 gap-y-4 sm:grid-cols-[auto_1fr]">
+								{image ? (
+									<div class="relative my-2 h-48 overflow-hidden rounded-md sm:w-36">
+										<a aria-hidden="true" href={href} tabindex={-1}>
+											<Image
+												alt=""
+												class="absolute inset-0 size-full object-cover"
+												src={getImageImport(image)}
+												width={480}
+												widths={[144, 288, 480, 768]}
+												sizes="(min-width: 40rem) 9rem, calc(100vw - 3rem)"
+											/>
 										</a>
 									</div>
-								</article>
-							</li>
-						);
-					})
-				}
+								) : null}
+								<div class="grid content-start gap-y-2">
+									<h2 class="text-xl font-medium text-brand">
+										<a href={href} tabindex={-1}>
+											{title}
+										</a>
+									</h2>
+									<div class="prose">{summary}</div>
+									<a
+										aria-label={`Read more about "${title}"`}
+										class="inline-flex justify-self-end rounded-md bg-brand px-4 py-1.5 text-sm font-medium text-white transition hover:bg-brand-intent"
+										href={href}
+									>
+										Read more
+									</a>
+								</div>
+							</article>
+						</li>
+					);
+				})}
 			</ul>
 		</PageCard>
 	</MainContent>

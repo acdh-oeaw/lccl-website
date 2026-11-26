@@ -1,5 +1,4 @@
 import type { CompileOptions } from "@mdx-js/mdx";
-import withSyntaxHighlighter from "@shikijs/rehype";
 import type { ElementContent } from "hast";
 import withHeadingIds from "rehype-slug";
 import withFrontmatter from "remark-frontmatter";
@@ -18,7 +17,6 @@ import {
 	withMdxTableOfContents,
 	withTableOfContents,
 } from "../lib/content/with-table-of-contents.js";
-import { config as syntaxHighlighterConfig } from "./syntax-highlighter.config.js";
 
 const typography: Record<Locale, TypographicOptions> = {
 	en: {
@@ -73,7 +71,6 @@ export async function createMdxConfig(locale: Locale): Promise<CompileOptions> {
 			withHeadingIds,
 			withTableOfContents,
 			withMdxTableOfContents,
-			[withSyntaxHighlighter, syntaxHighlighterConfig],
 			// withImageImports,
 		],
 	};

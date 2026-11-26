@@ -41,7 +41,9 @@ export function safeJsonLdReplacer(_key: string, value: JsonValue): JsonValue | 
 			return escape(value);
 		}
 
-		default: {
+		case "function":
+		case "symbol":
+		case "undefined": {
 			return undefined;
 		}
 	}

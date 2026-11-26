@@ -24,7 +24,7 @@ const { t } = await createI18n(Astro.currentLocale as Locale | undefined);
 		class="fixed mx-auto min-h-full w-full max-w-screen-md border bg-neutral-100 backdrop:bg-neutral-600/65 backdrop:backdrop-blur-sm open:grid sm:mt-[5rem] sm:max-h-[calc(100%-10rem)] sm:min-h-[16rem] sm:rounded-lg sm:shadow-lg"
 	>
 		<div class="grid size-full gap-y-4 bg-neutral-100 px-8 py-6" data-dialog-content>
-			<button class="absolute right-4 top-4 text-sm" data-search-close>
+			<button class="absolute top-4 right-4 text-sm" data-search-close>
 				<Icon aria-hidden="true" class="size-4 shrink-0" name="lucide:x" />
 				<span class="sr-only">{t("Search.close-dialog")}</span>
 			</button>
@@ -91,7 +91,7 @@ const { t } = await createI18n(Astro.currentLocale as Locale | undefined);
 					new PagefindUI({
 						element: dialogSearchResults,
 						baseUrl: import.meta.env.BASE_URL,
-						bundlePath: import.meta.env.BASE_URL.replace(/\/$/, "") + "/pagefind/",
+						bundlePath: `${import.meta.env.BASE_URL.replace(/\/$/, "")}/pagefind/`,
 						showImages: false,
 						showSubResults: true,
 					});
@@ -104,6 +104,8 @@ const { t } = await createI18n(Astro.currentLocale as Locale | undefined);
 </script>
 
 <style is:global>
+	@reference "../styles/tailwind.css";
+
 	site-search {
 		display: contents;
 	}
@@ -115,12 +117,12 @@ const { t } = await createI18n(Astro.currentLocale as Locale | undefined);
 
 	/* stylelint-disable-next-line selector-class-pattern */
 	.pagefind-ui .pagefind-ui__result {
-		@apply !border-t-0 !py-2;
+		@apply border-t-0! py-2!;
 	}
 
 	/* stylelint-disable-next-line selector-class-pattern */
 	.pagefind-ui .pagefind-ui__result-inner {
-		@apply bg-white py-3 px-4 rounded-md;
+		@apply rounded-md bg-white px-4 py-3;
 	}
 
 	/* stylelint-disable-next-line selector-class-pattern */

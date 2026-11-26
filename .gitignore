@@ -34,3 +34,6 @@ dist/
 /playwright/.cache/
 /playwright-report/
 /test-results/
+
+# browser verification
+.playwright-cli/

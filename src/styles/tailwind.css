@@ -1,0 +1,115 @@
+@import "tailwindcss";
+
+@plugin "@tailwindcss/typography";
+
+@config "../../tailwind.config.ts";
+
+@source "../../content";
+
+@theme {
+	--font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+	--breakpoint-xs: 30rem;
+	--breakpoint-lg: 70rem;
+	--color-neutral-50: var(--color-zinc-50);
+	--color-neutral-100: var(--color-zinc-100);
+	--color-neutral-200: var(--color-zinc-200);
+	--color-neutral-300: var(--color-zinc-300);
+	--color-neutral-400: var(--color-zinc-400);
+	--color-neutral-500: var(--color-zinc-500);
+	--color-neutral-600: var(--color-zinc-600);
+	--color-neutral-700: var(--color-zinc-700);
+	--color-neutral-800: var(--color-zinc-800);
+	--color-neutral-900: var(--color-zinc-900);
+	--color-neutral-950: var(--color-zinc-950);
+	--color-focus-ring: var(--color-zinc-950);
+	--radius-sm: 2px;
+	--radius-md: 4px;
+	--radius-lg: 8px;
+}
+
+@utility max-w-screen-md {
+	max-width: 48rem;
+}
+
+@utility max-w-screen-lg {
+	max-width: 70rem;
+}
+
+@utility grid-fluid-cols-56 {
+	grid-template-columns: repeat(
+		var(--fluid-columns-mode, auto-fill),
+		minmax(min(14rem, 100%), 1fr)
+	);
+}
+
+@utility grid-fluid-cols-auto-fit {
+	--fluid-columns-mode: auto-fit;
+}
+
+@layer base {
+	@media (resolution >= 200dpi) {
+		html {
+			font-size: 18px;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		*,
+		::before,
+		::after {
+			scroll-behavior: auto !important;
+			transition-duration: 0.01ms !important;
+			animation-duration: 0.01ms !important;
+			animation-iteration-count: 1 !important;
+		}
+	}
+
+	*,
+	::before,
+	::after,
+	::backdrop,
+	::file-selector-button {
+		border-color: var(--color-zinc-200);
+	}
+
+	html {
+		overflow: hidden;
+		height: 100%;
+		font-synthesis: none;
+		overflow-wrap: break-word;
+		text-rendering: optimizeLegibility;
+	}
+
+	body {
+		overflow-y: auto;
+		height: 100%;
+		background: var(--color-white);
+		color: var(--color-zinc-950);
+	}
+
+	:focus-visible {
+		outline: 2px solid var(--color-focus-ring);
+	}
+
+	a {
+		text-underline-offset: 0.15em;
+	}
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6,
+	blockquote {
+		text-wrap: balance;
+	}
+
+	p {
+		text-wrap: pretty;
+	}
+
+	[id] {
+		scroll-margin-block-start: 2ex;
+	}
+}

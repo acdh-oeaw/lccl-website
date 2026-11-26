@@ -1,0 +1,6 @@
+allowBuilds:
+  lefthook: true
+
+engineStrict: true
+
+shellEmulator: true

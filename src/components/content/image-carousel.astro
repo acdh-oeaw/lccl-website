@@ -1,7 +1,7 @@
 ---
 import { assert } from "@acdh-oeaw/lib";
-import { Image } from "astro:assets";
 import { Icon } from "astro-icon/components";
+import { Image } from "astro:assets";
 
 import { defaultLocale, type Locale } from "@/config/i18n.config";
 import { generateUniqueId } from "@/lib/generate-unique-id";
@@ -35,7 +35,7 @@ const { t } = await createI18n((Astro.currentLocale as Locale | undefined) ?? de
 		data-state="paused"
 	>
 		<div data-controls>
-			<div class="absolute left-8 top-8 z-10">
+			<div class="absolute top-8 left-8 z-10">
 				<button
 					class="rounded-md bg-black/50 p-2 text-white transition hover:bg-black/65 focus-visible:bg-black/65 focus-visible:outline-white"
 					data-control-toggle
@@ -53,7 +53,7 @@ const { t } = await createI18n((Astro.currentLocale as Locale | undefined) ?? de
 					/>
 				</button>
 			</div>
-			<div class="absolute right-8 top-8 z-10">
+			<div class="absolute top-8 right-8 z-10">
 				<button
 					aria-controls={id}
 					aria-label={t("ImageCarousel.previous")}
@@ -81,59 +81,60 @@ const { t } = await createI18n((Astro.currentLocale as Locale | undefined) ?? de
 			class="relative aspect-square sm:aspect-[2.125]"
 			data-carousel-items
 		>
-			{
-				slides.map((slide, index) => {
-					assert(slide.image);
+			{slides.map((slide, index) => {
+				assert(slide.image);
 
-					const alignments = {
-						left: "left-0",
-						right: "right-0",
-					};
+				const alignments = {
+					left: "left-0",
+					right: "right-0",
+				};
 
-					const href = `/${slide.id}`;
+				const href = `/${slide.id}`;
 
-					return (
-						<div
-							data-carousel-item
-							data-active={index === 0 ? "" : undefined}
-							role="group"
-							aria-roledescription="slide"
-							aria-label={t("ImageCarousel.slide", {
-								current: index,
-								total: slides.length,
-							})}
-							class="group relative size-full"
+				return (
+					<div
+						data-carousel-item
+						data-active={index === 0 ? "" : undefined}
+						role="group"
+						aria-roledescription="slide"
+						aria-label={t("ImageCarousel.slide", {
+							current: index,
+							total: slides.length,
+						})}
+						class="group relative size-full"
+					>
+						<a
+							class="block size-full -outline-offset-2 focus-visible:outline-white"
+							aria-label={slide.title}
+							href={href}
 						>
-							<a
-								class="block size-full -outline-offset-2 focus-visible:outline-white"
-								aria-label={slide.title}
-								href={href}
-							>
-								<Image
-									alt=""
-									class="size-full object-cover"
-									loading={index === 0 ? "eager" : undefined}
-									src={getImageImport(slide.image)}
-								/>
-							</a>
-							<div
-								class:list={[
-									"absolute bottom-0 grid w-full gap-y-2 border-t-4 border-brand bg-black/75 p-8 text-white",
-									alignments[slide.alignment ?? "left"],
-								]}
-							>
-								<h2 class="text-xl font-bold">
-									<a class="focus-visible:outline-white" href={href}>
-										{slide.title}
-									</a>
-								</h2>
-								<hr class="my-1 border-neutral-400" />
-								<div>{slide.summary}</div>
-							</div>
+							<Image
+								alt=""
+								class="size-full object-cover"
+								loading={index === 0 ? "eager" : undefined}
+								src={getImageImport(slide.image)}
+								width={1120}
+								widths={[480, 768, 1120, 1600]}
+								sizes="(min-width: 70rem) 70rem, 100vw"
+							/>
+						</a>
+						<div
+							class:list={[
+								"absolute bottom-0 grid w-full gap-y-2 border-t-4 border-brand bg-black/75 p-8 text-white",
+								alignments[slide.alignment ?? "left"],
+							]}
+						>
+							<h2 class="text-xl font-bold">
+								<a class="focus-visible:outline-white" href={href}>
+									{slide.title}
+								</a>
+							</h2>
+							<hr class="my-1 border-neutral-400" />
+							<div>{slide.summary}</div>
 						</div>
-					);
-				})
-			}
+					</div>
+				);
+			})}
 		</div>
 	</div>
 </image-carousel>

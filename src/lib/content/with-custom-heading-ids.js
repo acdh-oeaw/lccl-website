@@ -19,11 +19,9 @@ export function withCustomHeadingIds() {
 				return attribute.type === "mdxJsxAttribute" && attribute.name === "id";
 			})?.value;
 
-			assert(id, "`<HeadingId>` has no `id` prop.");
+			assert(typeof id === "string" && id.length > 0, "`<HeadingId>` has no `id` prop.");
 
-			if (parent.properties.id == null) {
-				parent.properties.id = String(id);
-			}
+			parent.properties.id ??= id;
 
 			parent.children.splice(/** @type {number} */ (index), 1);
 

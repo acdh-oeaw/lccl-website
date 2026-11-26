@@ -3,12 +3,12 @@ import node from "@astrojs/node";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import keystatic from "@keystatic/astro";
-import { defineConfig } from "astro/config";
+import tailwindcss from "@tailwindcss/vite";
 import icon from "astro-icon";
+import { defineConfig } from "astro/config";
 import { loadEnv } from "vite";
 
 // import { createConfig as createMdxConfig } from "./src/config/mdx.config";
-import { ensureTrailingSlash } from "./src/lib/ensure-trailing-slash";
 
 const env = loadEnv(import.meta.env.MODE, process.cwd(), "");
 
@@ -59,7 +59,13 @@ export default defineConfig({
 		 * @see https://docs.astro.build/en/guides/integrations-guide/solid-js/#combining-multiple-jsx-frameworks
 		 * @see https://github.com/Thinkmill/keystatic/discussions/951
 		 */
-		react({ include: ["**/keystatic/*"] }),
+		react({
+			include: [
+				"keystatic.config.@(ts|tsx)",
+				"**/content/**/*.@(ts|tsx)",
+				"**/keystatic/**/*.@(ts|tsx)",
+			],
+		}),
 		sitemap(),
 	],
 	/** Use `@/lib/content/get-mdx-content.ts` instead of astro's built-in markdown processor. */
@@ -70,25 +76,24 @@ export default defineConfig({
 	// 	smartypants: false,
 	// 	syntaxHighlight: false,
 	// },
-	output: "hybrid",
+	output: "static",
 	prefetch: {
 		defaultStrategy: "hover",
 		prefetchAll: true,
 	},
-	redirects: {
-		"/admin": {
-			destination: env.PUBLIC_APP_BASE_PATH
-				? ensureTrailingSlash(env.PUBLIC_APP_BASE_PATH) + "/keystatic"
-				: "/keystatic",
-			status: 307,
-		},
-	},
 	scopedStyleStrategy: "where",
 	security: {
-		checkOrigin: true,
+		allowedDomains: [
+			{ hostname: new URL(env.PUBLIC_APP_BASE_URL ?? "http://localhost:3000").hostname },
+		],
 	},
 	server: {
+		host: "127.0.0.1",
 		port: 3000,
 	},
 	site: env.PUBLIC_APP_BASE_URL,
+	vite: {
+		plugins: [tailwindcss()],
+		ssr: { noExternal: ["lucide-react"] },
+	},
 });

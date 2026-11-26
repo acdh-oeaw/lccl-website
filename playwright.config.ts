@@ -1,26 +1,21 @@
-import { join } from "node:path";
-
 import { defineConfig, devices } from "@playwright/test";
-import { isCI } from "ci-info";
-import { config as dotenv } from "dotenv";
-import { expand } from "dotenv-expand";
+import isInCi from "is-in-ci";
+import { loadEnv } from "vite";
 
-for (const envFilePath of [".env.test.local", ".env.local", ".env.test", ".env"]) {
-	expand(dotenv({ path: join(process.cwd(), envFilePath) }));
-}
+Object.assign(process.env, loadEnv("test", process.cwd(), ""));
 
-const port = 3000;
+const port = Number(process.env.PLAYWRIGHT_PORT ?? 3000);
 const baseUrl = `http://localhost:${String(port)}`;
 
 export default defineConfig({
 	testDir: "./e2e",
 	snapshotDir: "./e2e/snapshots",
 	fullyParallel: true,
-	forbidOnly: isCI,
-	retries: isCI ? 2 : 0,
+	forbidOnly: isInCi,
+	retries: isInCi ? 2 : 0,
 	maxFailures: 10,
-	workers: isCI ? 1 : undefined,
-	reporter: isCI ? "github" : "html",
+	workers: isInCi ? 1 : undefined,
+	reporter: isInCi ? "github" : "html",
 	use: {
 		baseURL: baseUrl,
 		trace: "on-first-retry",
@@ -69,8 +64,9 @@ export default defineConfig({
 		// },
 	],
 	webServer: {
-		command: "pnpm run start",
+		command: "node ./dist/server/entry.mjs",
+		env: { HOST: "127.0.0.1", PORT: String(port), NODE_ENV: "production" },
 		url: baseUrl,
-		reuseExistingServer: !isCI,
+		reuseExistingServer: false,
 	},
 });

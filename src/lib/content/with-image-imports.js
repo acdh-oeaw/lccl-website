@@ -107,6 +107,7 @@ export function withImageImports() {
 			imports.forEach((name, path) => {
 				declarations.push({
 					type: "ImportDeclaration",
+					attributes: [],
 					specifiers: [{ type: "ImportDefaultSpecifier", local: { type: "Identifier", name } }],
 					source: { type: "Literal", value: path },
 				});

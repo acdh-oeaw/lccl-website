@@ -27,7 +27,7 @@ export function withTableOfContents() {
 				};
 
 				if (element.properties.id != null) {
-					heading.id = /** @type {string} */ (element.properties.id);
+					heading.id = element.properties.id;
 				}
 
 				headings.push(heading);
@@ -81,6 +81,7 @@ export function withMdxTableOfContents() {
 					body: [
 						{
 							type: "ExportNamedDeclaration",
+							attributes: [],
 							source: null,
 							specifiers: [],
 							declaration: {

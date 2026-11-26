@@ -19,7 +19,7 @@ const { t } = await createI18n(Astro.currentLocale as Locale | undefined);
 	<a class="ml-1.5" href={`#${createFootnoteReferenceId(count)}`}>
 		<Icon
 			aria-hidden="true"
-			class="inline size-4 shrink-0 stroke-1 align-sub text-neutral-500 transition hover:text-neutral-950 dark:hover:text-neutral-0"
+			class="dark:hover:text-neutral-0 inline size-4 shrink-0 stroke-1 align-sub text-neutral-500 transition hover:text-neutral-950"
 			name="lucide:square-arrow-left"
 		/>
 		<span class="sr-only">{t("mdx.footnote-back-label", { count })}</span>

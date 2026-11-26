@@ -4,29 +4,38 @@
 # @see https://sharp.pixelplumbing.com/install#linux-memory-allocator
 
 # base
-FROM node:24-alpine AS base
-
-RUN corepack enable
+FROM node:26-alpine AS base
 
 RUN mkdir /app && chown -R node:node /app
 WORKDIR /app
 
+# node.js 26 no longer bundles corepack, so install the pnpm version pinned in `devEngines.packageManager`.
+COPY package.json /tmp/
+RUN npm install --global "pnpm@$(node -p "require('/tmp/package.json').devEngines.packageManager.version")" \
+	&& rm /tmp/package.json
+
 USER node
 
-COPY --chown=node:node .npmrc package.json pnpm-lock.yaml ./
+COPY --chown=node:node package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
-RUN pnpm fetch --prod
-RUN pnpm install --frozen-lockfile --ignore-scripts --offline --prod
+# production dependencies, only invalidated when dependencies change.
+FROM base AS deps
+
+RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store,uid=1000,gid=1000 \
+	pnpm install --store-dir=/pnpm/store --frozen-lockfile --ignore-scripts --prod
 
 # build
-FROM base as build
+FROM base AS build
 
-RUN pnpm fetch --dev
+# skip installing git hooks.
+ENV CI=true
+ENV LEFTHOOK=0
+
+# install all dependencies before copying the source, so content changes do not invalidate this layer.
+RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store,uid=1000,gid=1000 \
+	pnpm install --store-dir=/pnpm/store --frozen-lockfile
 
 COPY --chown=node:node ./ ./
-
-# astro assets cache
-COPY --chown=node:node ./node_modules/.astro ./node_modules/.astro
 
 ARG PUBLIC_APP_BASE_PATH
 ARG PUBLIC_APP_BASE_URL
@@ -43,11 +52,10 @@ ARG PUBLIC_REDMINE_ID
 # disable validation for runtime environment variables
 ENV ENV_VALIDATION=public
 
-RUN pnpm install --frozen-lockfile --offline
-
 ENV NODE_ENV=production
 
-RUN --mount=type=secret,id=KEYSTATIC_GITHUB_CLIENT_ID,uid=1000 \
+RUN --mount=type=cache,id=astro-assets,target=/app/node_modules/.astro,uid=1000,gid=1000 \
+		--mount=type=secret,id=KEYSTATIC_GITHUB_CLIENT_ID,uid=1000 \
 		--mount=type=secret,id=KEYSTATIC_GITHUB_CLIENT_SECRET,uid=1000 \
 		--mount=type=secret,id=KEYSTATIC_SECRET,uid=1000 \
 			KEYSTATIC_GITHUB_CLIENT_ID=$(cat /run/secrets/KEYSTATIC_GITHUB_CLIENT_ID) \
@@ -56,14 +64,14 @@ RUN --mount=type=secret,id=KEYSTATIC_GITHUB_CLIENT_ID,uid=1000 \
 		pnpm run build
 
 # serve
-FROM node:24-alpine AS serve
+FROM node:26-alpine AS serve
 
 RUN mkdir /app && chown -R node:node /app
 WORKDIR /app
 
 USER node
 
-COPY --from=base --chown=node:node /app/node_modules ./node_modules
+COPY --from=deps --chown=node:node /app/node_modules ./node_modules
 COPY --from=build --chown=node:node /app/dist ./
 
 ENV NODE_ENV=production
